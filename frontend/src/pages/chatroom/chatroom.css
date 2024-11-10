@@ -1,7 +1,7 @@
 .chatroom {
     display:  grid;
     grid-template-columns: 7fr 10fr;
-    height: 100vh;
+    height: 95vh;
 }
 
 .chat-widget {
@@ -66,4 +66,43 @@
 .chatroom-main {
     display: grid;
     grid-template-rows: 2fr 11fr;
+    overflow: hidden;
+}
+
+.chatroom-header input {
+    height: 30px;
+    width: 40%;
+    box-sizing: border-box;
+    padding: 0 10px;
+    color: white;
+}
+
+.chatroom-list-container {
+    margin-top: 30px;
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #6762A2;
+    border-radius: 20px;
+}
+
+.chat-widget {
+    width: 90%;
+    display: grid;
+    grid-template-columns: 1fr 7fr 1fr;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.chat-widget .chat-info {
+    padding: 0 30px;
+}
+
+.chat-widget img {
+    height: 60px;
+}
+
+.chatarea {
+    margin-left: 20px;
+    border-left: 1px solid white;
+    height: 100%;
 }

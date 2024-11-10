@@ -1,13 +1,21 @@
 .App {
+  height: 95vh;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+}
+
+.container {
+  height: 95vh;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 14fr;
-  height: 100vh;
-  padding: 15px;
-  box-sizing: border-box;
 }
 
 .navbar {
-  height: 90%;
+  height: 95vh;
   width: 80%;
   background-color: #6762A2;
   border-radius: 20px;
@@ -15,7 +23,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 20% 0;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .navbar-header, .navbar-footer {

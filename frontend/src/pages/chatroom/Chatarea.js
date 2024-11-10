@@ -1,6 +1,6 @@
 export default function ChatArea() {
     return (
-        <div>
+        <div className="chatarea">
             
         </div>
     );

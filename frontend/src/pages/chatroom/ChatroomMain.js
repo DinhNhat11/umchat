@@ -21,11 +21,7 @@ export default function ChatroomMain() {
             <ChatroomHeader />
 
             <div className="chatroom-list-container">
-                <div className="chatroom-list-header">
-                </div>
-                <div className="chatroom-list">
                     {chatroomList}
-                </div>
             </div>
         </div>
     )
