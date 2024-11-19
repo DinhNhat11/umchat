@@ -1,0 +1,21 @@
+{% extends "chat/layout.html" %}
+
+{% block title %}Login {% endblock %}
+
+{% block body %}
+<p>The navigation bar</p>
+<h5>UMchat logo</h5>
+
+    <form method ="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <button type = "submit">Login</button>
+    </form>
+
+    <div>
+        <a href="{% url 'register' %}">Create an account</a>
+
+    </div>
+
+{% endblock %}
