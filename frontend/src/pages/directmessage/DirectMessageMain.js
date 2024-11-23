@@ -1,7 +1,7 @@
 import { ChatWidget } from "../../components/Widgets";
-import ChatroomHeader from "./ChatroomHeader";
+import DirectMessageHeader from "./DirectMessageHeader";
 
-export default function ChatroomMain({setName}) {
+export default function DirectMessagexMain({setName}) {
     // const chatrooms = [
     //     {"name": "Chatroom 1", "message": "Previous message"},
     //     {"name": "Chatroom 2", "message": "Previous message"},
@@ -24,13 +24,13 @@ export default function ChatroomMain({setName}) {
     //     {"name": "Chatroom 6", "message": "Previous message"},
     // ];
 
-    const chatroomList = [];
+    const dms = [];
 
     for (let i = 0; i < 20; i++) {
-        chatroomList.push(
+        dms.push(
             <ChatWidget 
                 key={i} 
-                name={`Chatroom ${i}`} 
+                name={`Direct ${i}`} 
                 setName={setName}
                 message={"previous message"} />
         );
@@ -44,13 +44,13 @@ export default function ChatroomMain({setName}) {
 
 
     return (
-        <div className="chatroom-main">
-            <ChatroomHeader 
+        <div className="direct-message-main">
+            <DirectMessageHeader 
                 setName={setName}
             />
 
-            <div className="chatroom-list-container">
-                    {chatroomList}
+            <div className="direct-message-list-container">
+                {dms}
             </div>
         </div>
     )

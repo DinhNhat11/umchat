@@ -1,5 +1,6 @@
 import { Route, Routes, Outlet} from "react-router-dom";
 import Chatroom from "./pages/chatroom/Chatroom";
+import DirectMessage from "./pages/directmessage/DirectMessage";
 import Navbar from "./navbar";
 
 function NavbarLayout() {
@@ -18,7 +19,7 @@ export default function NavRoute({login, setIsLoggedIn}) {
       <Route element={<NavbarLayout />}>
         <Route path="/" element={<div>Home</div>} />
         <Route path="chatroom" element={<Chatroom />} />
-        <Route path="directmessage" element={<div>Direct message</div>} />
+        <Route path="directmessage" element={<DirectMessage />} />
       </Route>
 
       {/* Separate routes without Navbar */}

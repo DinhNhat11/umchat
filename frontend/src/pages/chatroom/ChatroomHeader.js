@@ -1,13 +1,14 @@
+import { RecentWidget } from "../../components/Widgets";
 
-
-export default function ChatroomHeader() {
+export default function ChatroomHeader({setName}) {
     const chatrooms = ["Chatroom 1", "Chatroom 2", "Chatroom 3", "Chatroom 4"];
 
     const chatroomRecents = chatrooms.map((chatroom, index) => {
         return (
-            <ChatroomRecentWidget 
+            <RecentWidget 
                 key={chatroom} 
-                name={chatroom} 
+                name={chatroom}
+                setName={setName}
                 img="https://img.icons8.com/?size=100&id=7Ffvtg1xmgaV&format=png&color=000000" 
             />
         )
@@ -20,15 +21,6 @@ export default function ChatroomHeader() {
             <div className="chatroom-recents">
                 {chatroomRecents}
             </div>
-        </div>
-    )
-}
-
-function ChatroomRecentWidget({name, img}) {
-    return (
-        <div className="recents-widget">
-            <img src={img} alt={name} />
-            <h3>{name}</h3>
         </div>
     )
 }
