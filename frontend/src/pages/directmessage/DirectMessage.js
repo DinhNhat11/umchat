@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChatArea, EmptyChatArea} from "../../components/Chatarea"
-import { Profile } from "../../components/Profile";
+import { UserProfile } from "../../components/Profile";
 import DirectMessageMain from "./DirectMessageMain";
 import "./directmessage.css";
 
@@ -29,7 +29,7 @@ export default function DirectMessage() {
                 setShowProfile={setShowProfile}
               />
               :
-              <Profile />
+              <UserProfile />
           )
         :
           <EmptyChatArea />

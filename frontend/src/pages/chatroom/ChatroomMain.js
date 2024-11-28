@@ -49,7 +49,7 @@ export default function ChatroomMain({setName}) {
                 setName={setName}
             />
 
-            <div className="chatroom-list-container">
+            <div className="chatroom-list-container custom-scrollbar">
                     {chatroomList}
             </div>
         </div>

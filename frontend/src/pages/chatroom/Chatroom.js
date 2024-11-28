@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChatArea, EmptyChatArea} from "../../components/Chatarea"
-import { Profile } from "../../components/Profile";
+import { GroupProfile } from "../../components/Profile";
 import ChatroomMain from "./ChatroomMain";
 import "./chatroom.css";
 
@@ -29,7 +29,7 @@ export default function Chatroom() {
                 setShowProfile={setShowProfile}
               />
               :
-              <Profile />
+              <GroupProfile />
           )
         :
           <EmptyChatArea />

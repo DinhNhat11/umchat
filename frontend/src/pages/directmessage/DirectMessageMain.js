@@ -49,7 +49,7 @@ export default function DirectMessagexMain({setName}) {
                 setName={setName}
             />
 
-            <div className="direct-message-list-container">
+            <div className="direct-message-list-container custom-scrollbar">
                 {dms}
             </div>
         </div>

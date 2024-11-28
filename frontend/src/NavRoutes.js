@@ -2,6 +2,7 @@ import { Route, Routes, Outlet} from "react-router-dom";
 import Chatroom from "./pages/chatroom/Chatroom";
 import DirectMessage from "./pages/directmessage/DirectMessage";
 import Navbar from "./navbar";
+import ProfilePage from "./pages/myprofile/ProfilePage";
 
 function NavbarLayout() {
   return (
@@ -23,7 +24,7 @@ export default function NavRoute({login, setIsLoggedIn}) {
       </Route>
 
       {/* Separate routes without Navbar */}
-      <Route path="profile" element={<div>Profile</div>} />
+      <Route path="profile" element={<ProfilePage />} />
       <Route path="settings" element={<div>Settings</div>} />
       <Route path="logout" element={<div>Logout</div>} />
       <Route path="login" element={<div>

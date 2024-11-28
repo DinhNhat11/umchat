@@ -64,17 +64,3 @@
     background-color: #6762A2;
     border-radius: 20px;
 }
-
-.chatroom-list-container::-webkit-scrollbar {
-    width: 5px;
-}
-
-.chatroom-list-container::-webkit-scrollbar-thumb {
-    background-color:#353453;
-    border-radius: 10px;
-}
-
-.chatroom-list-container::-webkit-scrollbar-track {
-    background-color: #7974AB;
-    border-radius: 10px;
-}
