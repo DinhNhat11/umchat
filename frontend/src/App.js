@@ -1,24 +1,38 @@
-import logo from './logo.svg';
+import { useEffect, useContext} from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LocationContext } from './contexts/locationContext.js';
+import Logout from './pages/logout/Logout.js';
 import './App.css';
+import NavRoute from './NavRoutes.js';
 
 function App() {
+  const { isLoggedIn, showLogout } = useContext(LocationContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  let className = showLogout ? 'disabled' : ''; 
+
+  useEffect(() => {
+    if (!isLoggedIn ) {
+      navigate('/login');
+    } else if (isLoggedIn && location.pathname === '/login') {
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate, location.pathname]);
+
+  // useEffect(() => {
+  //   navigate('/profile');
+  // }, [navigate]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className={'App ' + className}>
+        <NavRoute />
+      </div>
+      {
+        showLogout && 
+        <Logout />
+      }
+    </>
   );
 }
 
