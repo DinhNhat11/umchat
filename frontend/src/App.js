@@ -1,12 +1,15 @@
-import { useState, useEffect} from 'react';
+import { useEffect, useContext} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { LocationContext } from './contexts/locationContext.js';
+import Logout from './pages/logout/Logout.js';
 import './App.css';
 import NavRoute from './NavRoutes.js';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { isLoggedIn, showLogout } = useContext(LocationContext);
   const navigate = useNavigate();
   const location = useLocation();
+  let className = showLogout ? 'disabled' : ''; 
 
   useEffect(() => {
     if (!isLoggedIn ) {
@@ -17,16 +20,19 @@ function App() {
   }, [isLoggedIn, navigate, location.pathname]);
 
   // useEffect(() => {
-  //   navigate('/chatroom');
+  //   navigate('/profile');
   // }, [navigate]);
 
   return (
-    <div className='App'>
-        <NavRoute 
-          login={isLoggedIn} 
-          setIsLoggedIn={setIsLoggedIn}
-        />
-    </div>
+    <>
+      <div className={'App ' + className}>
+        <NavRoute />
+      </div>
+      {
+        showLogout && 
+        <Logout />
+      }
+    </>
   );
 }
 

@@ -15,6 +15,10 @@ export function ChatArea({name, profilePic, setName, mode, profile, setShowProfi
     const textareaRef = useRef(null);
     const textAreaParentRef = useRef(null);
 
+    useEffect(() => {
+        setOptions(false);
+    }, [name])
+
     const onChange = (event) => {
         setValue(event.target.value)
     };
