@@ -20,7 +20,7 @@ function App() {
   }, [isLoggedIn, navigate, location.pathname]);
 
   // useEffect(() => {
-  //   navigate('/profile');
+  //   navigate('/chatroom');
   // }, [navigate]);
 
   return (

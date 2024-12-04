@@ -1,9 +1,63 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
 from .models import *
 from .forms import *
-from django.contrib.auth import logout
+from .serializer import *
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
+from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+
+class ChatRoomView(APIView):
+    def get(self, request):
+        chat_rooms = [{
+            "name": chat_room.name,
+            "created_at": chat_room.created_at,
+            "image": "blank",
+            "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+        } for chat_room in ChatRoom.objects.all()]
+
+        return Response(chat_rooms)
+    
+    def post(self, request):
+        serializer = ChatRoomSerializer(data=request.data)
+        if serializers.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+@method_decorator(csrf_protect, name='dispatch')
+class LoginView(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def post(self, request):
+        
+        if request.method == "POST":
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+        
+        if not User.objects.filter(username=username).exists():
+            message = "The username you entered does not exist. Please try again."
+            return Response(message, status=401, headers=headers)
+        
+        # Authenticate the user with the provided username and password
+        user = authenticate(username=username, password=password)
+        
+        if user is None:
+            message = "The Username / password you entered is incorrect. Please try again."
+            return Response(message, status=401)
+        else:
+            message = "You have successfully logged in."
+            login(request, user)
+            return Response(message, status=200)
+
+@method_decorator(ensure_csrf_cookie, name='dispatch')
+class GetCSRFToken(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def get(self, request):
+        return Response({"success": "CSRF cookie set"})
 
 
 def register(request):

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import ChatRoom, Message
+from .models import ChatRoom, ChatroomMessage
 from asgiref.sync import sync_to_async
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer

@@ -25,15 +25,20 @@ SECRET_KEY = 'django-insecure-mj2u#hs5*m4=y2(duw4l5w_mexhjgf-gvwb)gptfj*hmhtn6(v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
+
+CORS_ALLOW_HEADERS = "*"
+
 
 INSTALLED_APPS = [
     'chat',
     'daphne',
     'channels',
+    "rest_framework",
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +62,27 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_COOKIE_SAMESITE = "None"
+
+CSRF_COOKIE_SECURE = True
+
+CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+
+CORS_ALLOWED_ORIGINS =  ["http://localhost:3000"]
 
 ROOT_URLCONF = 'ChatApp.urls'
 
@@ -134,5 +159,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/" 
 LOGOUT_REDIRECT_URL = "/"

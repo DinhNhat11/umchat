@@ -1,56 +1,41 @@
 import { ChatWidget } from "../../components/Widgets";
 import ChatroomHeader from "./ChatroomHeader";
+import { useContext, useState } from "react";
+import { ChatroomContext } from "../../contexts/ChatroomContext";
 
 export default function ChatroomMain({setName}) {
-    // const chatrooms = [
-    //     {"name": "Chatroom 1", "message": "Previous message"},
-    //     {"name": "Chatroom 2", "message": "Previous message"},
-    //     {"name": "Chatroom 3", "message": "Previous message"},
-    //     {"name": "Chatroom 4", "message": "Previous message"},
-    //     {"name": "Chatroom 5", "message": "Previous message"},
-    //     {"name": "Chatroom 6", "message": "Previous message"},
-    //     {"name": "Chatroom 7", "message": "Previous message"},
-    //     {"name": "Chatroom 8", "message": "Previous message"},
-    //     {"name": "Chatroom 9", "message": "Previous message"},
-    //     {"name": "Chatroom 10", "message": "Previous message"},
-    //     {"name": "Chatroom 11", "message": "Previous message"},
-    //     {"name": "Chatroom 12", "message": "Previous message"},
-    //     {"name": "Chatroom 13", "message": "Previous message"},
-    //     {"name": "Chatroom 14", "message": "Previous message"},
-    //     {"name": "Chatroom 15", "message": "Previous message"},
-    //     {"name": "Chatroom 6", "message": "Previous message"},
-    //     {"name": "Chatroom 6", "message": "Previous message"},
-    //     {"name": "Chatroom 6", "message": "Previous message"},
-    //     {"name": "Chatroom 6", "message": "Previous message"},
-    // ];
+    const { chatrooms, fetchChatrooms } = useContext(ChatroomContext);
+    const [searchName, setSearchName] = useState("");
 
-    const chatroomList = [];
-
-    for (let i = 0; i < 20; i++) {
-        chatroomList.push(
-            <ChatWidget 
-                key={i} 
-                name={`Chatroom ${i}`} 
-                setName={setName}
-                message={"previous message"} />
-        );
+    if (chatrooms.length === 0) {
+        fetchChatrooms();
     }
 
-    // const chatroomList = chatrooms.map((chatroom, index) => {
-    //     return (
-    //         <ChatWidget key={index} name={chatroom.name} message={chatroom.message} />
-    //     )
-    // });
+    const chatroomList = chatrooms.filter((chatroom) => {
+        return chatroom.name.toLowerCase().includes(searchName.toLowerCase());
+    })
+    .map((chatroom, index) => {
+        return (
+            <ChatWidget key={index} name={chatroom.name} message={"Previous Message"} setName={setName} />
+        )
+    });
 
 
     return (
         <div className="chatroom-main">
             <ChatroomHeader 
                 setName={setName}
+                searchName={searchName}
+                setSearchName={setSearchName}
             />
 
             <div className="chatroom-list-container custom-scrollbar">
-                    {chatroomList}
+                    {
+                        chatroomList.length === 0 ?
+                        <div className="empty-message">No chatrooms found</div>
+                        :
+                        chatroomList
+                    }
             </div>
         </div>
     )

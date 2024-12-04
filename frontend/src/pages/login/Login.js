@@ -1,27 +1,48 @@
-import { useState, useContext} from "react";
+import { useState, useContext, useEffect} from "react";
 import { LocationContext } from "../../contexts/locationContext";
 import "./login.css";
+import { UserContext, UserProvider } from "../../contexts/UserContext";
+import { CSRFToken } from "../../components/CSRFToken";
 
 function Login() {
-    const { toggleLoggedIn } = useContext(LocationContext);
+    const [FormInput, setFormInput] = useState({
+        username: "",
+        password: ""
+    });
+
+    // const { toggleLoggedIn } = useContext(LocationContext);
+    const { loginUser, user } = useContext(UserContext);
+
+    useEffect(() => {
+        console.log(user);
+    }, [user])
+
     const handleLogin = (e) => {
         e.preventDefault();
-        toggleLoggedIn();
+        loginUser(FormInput.username, FormInput.password);
+    }
+
+    const handleChange = (e) => {
+        setFormInput({
+            ...FormInput,
+            [e.target.name]: e.target.value
+        });
     }
 
     return (
         <div className="login-page">
             <form className="login-form" onSubmit={handleLogin}>
+                <CSRFToken />
                 <div className="username">
                     <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username" />
+                    <input type="text" id="username" name="username" value={FormInput.username} onChange={handleChange}/>
                 </div>
                 <div className="password">
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" />
+                    <input type="password" id="password" name="password" value={FormInput.password} onChange={handleChange}/>
                 </div>
                 <div className="submit">
-                    <button type="submit">Login</button>
+                    <button type="submit" onClick={handleLogin}>Login</button>
                 </div>
             </form>
         </div>
@@ -71,7 +92,12 @@ export default function LoginSignUp() {
                 <button onClick={() => setMode("login")} className={mode === "login"? "active" : "not-active"}>Login</button>
                 <button onClick={() => setMode("signup")} className={mode === "signup"? "active" : "not-active"}>Sign Up</button>
             </div>
-            {mode === "login" ? <Login /> : <SignUp />}
+            {mode === "login" ?
+                <UserProvider>
+                    <Login />
+                </UserProvider>
+                    : 
+                <SignUp />}
         </div>
     )
 }

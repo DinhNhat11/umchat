@@ -12,9 +12,18 @@ class ChatRoom(models.Model):
     def __str__(self):
         return self.name
     
-class Message(models.Model):
+class ChatroomMessage(models.Model):
     chat_room = models.ForeignKey(ChatRoom, on_delete= models.CASCADE,related_name = "roomMessages")
     user = models.ForeignKey(User,on_delete= models.CASCADE, related_name= "userMessages")
+    content = models.TextField()
+    time_stamp = models.DateTimeField(auto_now_add= True)
+    
+    def __str__(self):
+        return f'{self.user}: {self.content}'
+
+class DirectMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete= models.CASCADE, related_name= "sent_messages")
+    receiver = models.ForeignKey(User, on_delete= models.CASCADE, related_name= "received_messages")
     content = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add= True)
     

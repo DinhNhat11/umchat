@@ -1,13 +1,15 @@
 import { RecentWidget } from "../../components/Widgets";
+import { useContext } from "react";
+import { ChatroomContext } from "../../contexts/ChatroomContext";
 
-export default function ChatroomHeader({setName}) {
-    const chatrooms = ["Chatroom 1", "Chatroom 2", "Chatroom 3", "Chatroom 4"];
+export default function ChatroomHeader({setName, searchName, setSearchName}) {
+    const { chatrooms } = useContext(ChatroomContext);
 
-    const chatroomRecents = chatrooms.map((chatroom, index) => {
+    const chatroomRecents = chatrooms.slice(4).map((chatroom) => {
         return (
             <RecentWidget 
-                key={chatroom} 
-                name={chatroom}
+                key={chatroom.name} 
+                name={chatroom.name}
                 setName={setName}
                 img="https://img.icons8.com/?size=100&id=7Ffvtg1xmgaV&format=png&color=000000" 
             />
@@ -17,7 +19,7 @@ export default function ChatroomHeader({setName}) {
     return (
         <div className="chatroom-header">
             <h1>Chatrooms</h1>
-            <input type="text" placeholder="Search chatrooms" />
+            <input type="text" placeholder="Search chatrooms" value={searchName} onChange={(e) => setSearchName(e.target.value)}/>
             <div className="chatroom-recents">
                 {chatroomRecents}
             </div>

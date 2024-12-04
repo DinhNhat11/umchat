@@ -6,6 +6,7 @@ import ChatroomMain from "./ChatroomMain";
 import { LocationContext } from "../../contexts/locationContext";
 import { groupProfile } from "../../components/sampleProfile"
 import "./chatroom.css";
+import { ChatroomProvider } from "../../contexts/ChatroomContext";
 
 export default function Chatroom() {
   const [name, setName] = useState(null);
@@ -15,14 +16,16 @@ export default function Chatroom() {
 
   return (
     <div className="chatroom desktop dark">
-      <ChatroomMain
-        setName={
-          (value) => {
-            setName(value);
-            setShowProfile(false);
+      <ChatroomProvider>
+        <ChatroomMain
+          setName={
+            (value) => {
+              setName(value);
+              setShowProfile(false);
+            }
           }
-        }
-      />
+        />
+      </ChatroomProvider>
       {
         name ?
           (
