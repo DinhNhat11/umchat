@@ -1,17 +1,23 @@
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
 import { IPADDRESS } from '../Backend_Address';
-import { handleFetch } from '../api/HandleFetch';
+import { handleFetch, handleFetchAxios } from '../api/HandleFetch';
 
 export const ChatroomContext = createContext(undefined);
 
 export const ChatroomProvider = ({ children }) => {
     const [chatRoomList, setChatRoomList] = useState([]);
+    const [response, setResponse] = useState();
     const apiUrl = IPADDRESS + "chatrooms/";
 
     const fetchChatroomList = () => {
-        handleFetch(apiUrl, setChatRoomList, false);
+        handleFetchAxios(apiUrl, setResponse, false);
     }
 
+    useEffect(() => {
+        if (response && response.code == 200) {
+            setChatRoomList(response.message);
+        }
+    }, [response])
 
     return <ChatroomContext.Provider 
         value={{

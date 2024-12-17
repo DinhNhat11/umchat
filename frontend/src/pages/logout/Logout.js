@@ -9,12 +9,14 @@ export default function Logout() {
             <h1>Logout</h1>
             <p>Are you sure you want to logout?</p>
             <div>
-                <button onClick={() => {
+                <button className="option-button" onClick={() => {
                     toggleLoggedIn()
                     setShowLogout(false)
                     }
                 }>Yes</button>
-                <button onClick={() => setShowLogout(false)}>No</button>
+                <button className="option-button deny-button"
+                    onClick={() => setShowLogout(false)}
+                >No</button>
             </div>
         </div>
     )

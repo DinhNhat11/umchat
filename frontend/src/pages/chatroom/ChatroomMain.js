@@ -1,15 +1,19 @@
 import { ChatWidget } from "../../components/Widgets";
 import ChatroomHeader from "./ChatroomHeader";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChatroomContext } from "../../contexts/ChatroomContext";
 
 export default function ChatroomMain({setName}) {
     const { chatrooms, fetchChatrooms } = useContext(ChatroomContext);
     const [searchName, setSearchName] = useState("");
 
-    if (chatrooms.length === 0) {
+    // if (chatrooms.length === 0) {
+    //     fetchChatrooms();
+    // }
+
+    useEffect(() => {
         fetchChatrooms();
-    }
+    }, [])
 
     const chatroomList = chatrooms.filter((chatroom) => {
         return chatroom.name.toLowerCase().includes(searchName.toLowerCase());

@@ -1,1 +1,1 @@
-export const IPADDRESS = "http://127.0.0.1:8000/"
+export const IPADDRESS = "http://localhost:8000/"

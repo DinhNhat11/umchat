@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +31,14 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-CORS_ALLOW_HEADERS = "*"
+CORS_ALLOW_HEADERS = (
+    *default_headers,
+    "x_csrftoken",
+    "mode",
+    "csrfmiddlewaretoken"
+)
+
+CORS_ALLOW_CREDENTIALS = True
 
 
 INSTALLED_APPS = [
@@ -159,5 +167,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = "/" 
 LOGOUT_REDIRECT_URL = "/"

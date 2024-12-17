@@ -7,19 +7,26 @@ from django.http import Http404
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect, csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
+from uuid import UUID
+
+import json
+
+@method_decorator(login_required, name='dispatch')
 class ChatRoomView(APIView):
+    template_name = "chatrooms"
     def get(self, request):
         chat_rooms = [{
             "name": chat_room.name,
             "created_at": chat_room.created_at,
             "image": "blank",
             "participants": [{"Username": user.username} for user in chat_room.participants.all()]
-        } for chat_room in ChatRoom.objects.all()]
+        } for chat_room in request.user.chat_rooms.all()]
 
         return Response(chat_rooms)
     
@@ -28,19 +35,57 @@ class ChatRoomView(APIView):
         if serializers.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        
+@method_decorator(login_required, name='dispatch')
+class UserView(APIView):
+    template_name = "user"
+    def get(self, request, id):
+        try:
+            data = UserProfile.objects.get(public_id=id)
+            message = {"username": data.user.username}
+            status = 200
+
+        except ObjectDoesNotExist:
+            message = "The username with id: " + id + "does not exist"
+            status = 404
+
+        return Response(message, status)
+    
+@method_decorator(login_required, name='dispatch')
+class FriendRequestView(APIView):
+    template_name = "friend_request"
+
+    def post(self, request):
+        sender = request.user.profile.public_id
+        receiver = UUID(request.data['receiver'])
+        print(sender, receiver)
+        serializer = FriendRequestSerializer(data={'sender': sender, 'receiver': receiver})
+                
+        if (serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            return (Response(status=200))
+        
+        return Response(status=301)
+        
+
 
 @method_decorator(csrf_protect, name='dispatch')
-class LoginView(APIView):
+class MyLoginView(APIView):
     permission_classes = (permissions.AllowAny, )
+
     def post(self, request):
-        
         if request.method == "POST":
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+            if request.content_type == 'application/json':
+                try:
+                    data = json.loads(request.body)
+                    username = data.get('username')
+                    password = data.get('password')
+                except json.JSONDecodeError:
+                    return Response({'error': 'Invalid JSON'}, status=400)
         
         if not User.objects.filter(username=username).exists():
             message = "The username you entered does not exist. Please try again."
-            return Response(message, status=401, headers=headers)
+            return Response(message, status=401)
         
         # Authenticate the user with the provided username and password
         user = authenticate(username=username, password=password)
@@ -49,9 +94,23 @@ class LoginView(APIView):
             message = "The Username / password you entered is incorrect. Please try again."
             return Response(message, status=401)
         else:
-            message = "You have successfully logged in."
+            response = {
+                "username": user.username,
+                "email": user.email
+            }
             login(request, user)
-            return Response(message, status=200)
+            return Response(response, status=200)
+        
+    def get(self, request):
+        if request.method == "GET":
+            if request.user.is_authenticated:
+                response = {
+                    "username": request.user.username,
+                    "email": request.user.email
+                }
+                return Response(response, status=200)
+        
+        return Response("User not Logged In", 401)
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class GetCSRFToken(APIView):

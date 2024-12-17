@@ -5,8 +5,6 @@ export const LocationContext = createContext(undefined);
 
 export const LocationProvider = ({ children }) => {
     const [prevLocation, setPrevLocation] = useState('/');
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [showLogout, setShowLogout] = useState(false);
     const [profileMode, setProfileMode] = useState("view");
     const navigate = useNavigate()
 
@@ -37,22 +35,14 @@ export const LocationProvider = ({ children }) => {
         setPrevLocation(location);
     }
 
-    const toggleLoggedIn = () => {
-        setLoggedIn((prev) => !prev);
-    }
-
-    useEffect(() => {
-        console.log(prevLocation);
-    }, [prevLocation]);
+    // useEffect(() => {
+    //     console.log(prevLocation);
+    // }, [prevLocation]);
 
     return <LocationContext.Provider 
         value={{
             prevLocation,
             setPrevLocation: changeLocation,
-            isLoggedIn: loggedIn,
-            toggleLoggedIn,
-            showLogout,
-            setShowLogout,
             actions,
             profileMode: () => profileMode
         }}

@@ -1,9 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from uuid import uuid4
 # Create your models here.
 
 
 class ChatRoom(models.Model):
+    public_id = models.UUIDField(default=uuid4, editable=False)
     name = models.CharField(max_length=150, unique= True)
     created_at = models.DateTimeField(auto_now_add = True)
     image = models.ImageField(upload_to='chatroom_images/', blank=True, null=True)
@@ -31,8 +33,47 @@ class DirectMessage(models.Model):
         return f'{self.user}: {self.content}'
     
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    public_id = models.UUIDField(default=uuid4, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    readonly_fields = ('public_id',)
 
     def __str__(self):
         return self.user.username
+    
+    def friends(self):
+        """
+        Retrieve all friends related to the user.
+        """
+        return UserProfile.objects.filter(
+            models.Q(user_1__user_2=self) | models.Q(user_2__user_1=self)
+        )
+    
+    def sent_friend_requests(self):
+        """
+        Retrieve all friend requests sent by this user.
+        """
+        return self.sent.all()
+
+    def received_friend_requests(self):
+        """
+        Retrieve all friend requests received by this user.
+        """
+        return self.received.all()
+    
+class Friend(models.Model):
+    id = models.AutoField(primary_key=True)
+    user1 = models.ForeignKey(UserProfile, related_name='user_1', on_delete=models.CASCADE, to_field="public_id")
+    user2 = models.ForeignKey(UserProfile, related_name='user_2', on_delete=models.CASCADE, to_field="public_id")
+
+    class Meta:
+        unique_together = ('user1', 'user2')
+
+class FriendRequest(models.Model):
+    id = models.AutoField(primary_key=True)
+    sender = models.ForeignKey(UserProfile, related_name='sent', on_delete=models.CASCADE, to_field="public_id")
+    receiver = models.ForeignKey(UserProfile, related_name='received', on_delete=models.CASCADE, to_field="public_id")
+
+    class Meta:
+        unique_together = ('sender', 'receiver')

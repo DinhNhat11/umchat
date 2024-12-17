@@ -4,7 +4,7 @@ from .models import *
 class ChatRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatRoom
-        fields = ['name', 'created_at', 'image']
+        fields = ['name', 'created_at', 'image', 'participants']
 
 class ChatroomMessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,3 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendRequest
+        fields = ['sender', 'receiver']

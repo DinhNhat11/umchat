@@ -3,19 +3,21 @@ import { LocationContext } from "../../contexts/locationContext";
 import "./login.css";
 import { UserContext, UserProvider } from "../../contexts/UserContext";
 import { CSRFToken } from "../../components/CSRFToken";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
+    const { user, loginUser, isLoggedIn } = useContext(UserContext)
     const [FormInput, setFormInput] = useState({
         username: "",
         password: ""
     });
 
-    // const { toggleLoggedIn } = useContext(LocationContext);
-    const { loginUser, user } = useContext(UserContext);
-
-    useEffect(() => {
-        console.log(user);
-    }, [user])
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         navigate("/chatroom")
+    //     };
+    // }, [isLoggedIn])
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -30,8 +32,8 @@ function Login() {
     }
 
     return (
-        <div className="login-page">
-            <form className="login-form" onSubmit={handleLogin}>
+        <div className="login-page" action="http://localhost:8000/accounts/login">
+            <form className="login-form" onSubmit={handleLogin} >
                 <CSRFToken />
                 <div className="username">
                     <label htmlFor="username">Username</label>
@@ -42,7 +44,7 @@ function Login() {
                     <input type="password" id="password" name="password" value={FormInput.password} onChange={handleChange}/>
                 </div>
                 <div className="submit">
-                    <button type="submit" onClick={handleLogin}>Login</button>
+                    <button type="submit">Login</button>
                 </div>
             </form>
         </div>
@@ -50,10 +52,8 @@ function Login() {
 }
 
 function SignUp() {
-    const { toggleLoggedIn } = useContext(LocationContext);
     const handleLogin = (e) => {
         e.preventDefault();
-        toggleLoggedIn();
     }
 
     return (
@@ -93,11 +93,10 @@ export default function LoginSignUp() {
                 <button onClick={() => setMode("signup")} className={mode === "signup"? "active" : "not-active"}>Sign Up</button>
             </div>
             {mode === "login" ?
-                <UserProvider>
-                    <Login />
-                </UserProvider>
+                <Login />
                     : 
-                <SignUp />}
+                <SignUp />
+            }
         </div>
     )
 }

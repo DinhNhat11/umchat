@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { handleFetch } from "../api/HandleFetch";
+import { handleFetch, handleFetchAxios } from "../api/HandleFetch";
 import { IPADDRESS } from "../Backend_Address";
-import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+// import Cookies from 'js-cookie';
 
 export const CSRFToken = () => {
     const [csrftoken, setcsrftoken] = useState('');
+    const [response, setResponse] = useState('');
+    const navigate = useNavigate();
 
     const changeCsrfToken = (value) => {
-        console.log(value)
         value && setcsrftoken(value);
     }
 
@@ -28,9 +30,15 @@ export const CSRFToken = () => {
     }
 
     useEffect(() => {
-        handleFetch(IPADDRESS + "accounts/get-csrf-token/", null, false);
+        handleFetchAxios(IPADDRESS + "accounts/get-csrf-token/", setResponse, false);
         changeCsrfToken(getCookie('csrftoken'));
     }, []);
+
+    useEffect(() => {
+        if (response && response.code == 504) {
+            navigate('/server-down');
+        }
+    }, [response])
 
     return (
         <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />

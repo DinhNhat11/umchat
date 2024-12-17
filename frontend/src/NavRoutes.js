@@ -35,6 +35,7 @@ export default function NavRoute() {
       <Route path="profile" element={<ProfilePage />}/>
       <Route path="settings" element={<div>404 Not Found</div>} />
       <Route path="login" element={<LoginSignUp />} />
+      <Route path="server-down" element={<div>Server is not responding</div>} />
       <Route path="*" element={<div>404 Not Found</div>} />
     </Routes>
   );

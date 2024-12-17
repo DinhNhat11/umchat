@@ -83,3 +83,13 @@
 .desktop > div:last-child{
   margin-left: 20px;
 }
+
+.option-button {
+  padding: 10px 20px;
+  background-color: #7974AB;
+  margin: 0 20px;
+}
+
+.deny-button {
+  background-color: red;
+}
