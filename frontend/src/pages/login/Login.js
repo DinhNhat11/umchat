@@ -13,11 +13,11 @@ function Login() {
         password: ""
     });
 
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         navigate("/chatroom")
-    //     };
-    // }, [isLoggedIn])
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/chatroom")
+        };
+    }, [isLoggedIn])
 
     const handleLogin = (e) => {
         e.preventDefault();

@@ -48,7 +48,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     @sync_to_async
     def create_message(self, chat_room, user, message):
-        return Message.objects.create(chat_room=chat_room, user=user, content=message)
+        return ChatroomMessage.objects.create(chat_room=chat_room, user=user, content=message)
 
     async def disconnect(self,close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)

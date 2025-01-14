@@ -3,13 +3,14 @@ from django.contrib.auth.models import User
 from uuid import uuid4
 # Create your models here.
 
-
 class ChatRoom(models.Model):
     public_id = models.UUIDField(default=uuid4, editable=False)
     name = models.CharField(max_length=150, unique= True)
     created_at = models.DateTimeField(auto_now_add = True)
     image = models.ImageField(upload_to='chatroom_images/', blank=True, null=True)
     participants = models.ManyToManyField(User, related_name = 'chat_rooms', blank = True)
+    created_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name= "roomCreated", null= True)
+    desc = models.TextField(blank= True, null= True)
     
     def __str__(self):
         return self.name
@@ -33,7 +34,7 @@ class DirectMessage(models.Model):
         return f'{self.user}: {self.content}'
     
 class UserProfile(models.Model):
-    public_id = models.UUIDField(default=uuid4, unique=True)
+    public_id = models.UUIDField(default=uuid4, unique=True, primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
@@ -74,6 +75,7 @@ class FriendRequest(models.Model):
     id = models.AutoField(primary_key=True)
     sender = models.ForeignKey(UserProfile, related_name='sent', on_delete=models.CASCADE, to_field="public_id")
     receiver = models.ForeignKey(UserProfile, related_name='received', on_delete=models.CASCADE, to_field="public_id")
+
 
     class Meta:
         unique_together = ('sender', 'receiver')

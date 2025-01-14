@@ -11,4 +11,5 @@ urlpatterns = [
     path("add-friend/", FriendRequestView.as_view(), name="friend-request"),
     path("accounts/login/", MyLoginView.as_view(), name="login-user"),
     path("accounts/get-csrf-token/", GetCSRFToken.as_view(), name="get-csrf-token"),
+    path("create-chatroom/", CreateChatRoomView.as_view(), name="create-chatroom"),
 ]

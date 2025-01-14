@@ -17,16 +17,41 @@ from uuid import UUID
 
 import json
 
+# @method_decorator(login_required, name='dispatch')
+# class ChatRoomView(APIView):
+#     template_name = "chatrooms"
+#     def get(self, request):
+#         chat_rooms = [{
+#             "name": chat_room.name,
+#             "created_at": chat_room.created_at,
+#             "image": "blank",
+#             "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+#         } for chat_room in request.user.chat_rooms.all()]
+
+#         return Response(chat_rooms)
+    
+#     def post(self, request):
+#         serializer = ChatRoomSerializer(data=request.data)
+#         if serializers.is_valid(raise_exception=True):
+#             serializer.save()
+#             return Response(serializer.data)
+
 @method_decorator(login_required, name='dispatch')
 class ChatRoomView(APIView):
     template_name = "chatrooms"
-    def get(self, request):
-        chat_rooms = [{
-            "name": chat_room.name,
-            "created_at": chat_room.created_at,
-            "image": "blank",
-            "participants": [{"Username": user.username} for user in chat_room.participants.all()]
-        } for chat_room in request.user.chat_rooms.all()]
+    def get(self, request):       
+        chat_rooms = []         # a list contain all chatroom that the user join
+        for chat_room in request.user.chat_rooms.all():
+            messages_queryset = chat_room.roomMessages.order_by('time_stamp')
+            messages = ChatroomMessageSerializer(messages_queryset, many = True).data # get all messages in a room
+            
+            chat_rooms.append({
+                "name": chat_room.name,
+                "created_at": chat_room.created_at,
+                "image": "blank",
+                "chatroom_messages": messages,
+                "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+            })
 
         return Response(chat_rooms)
     
@@ -35,6 +60,14 @@ class ChatRoomView(APIView):
         if serializers.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        
+class CreateChatRoomView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = ChatRoomSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
         
 @method_decorator(login_required, name='dispatch')
 class UserView(APIView):
@@ -117,27 +150,25 @@ class GetCSRFToken(APIView):
     permission_classes = (permissions.AllowAny, )
     def get(self, request):
         return Response({"success": "CSRF cookie set"})
+    
+@method_decorator(login_required, name='dispatch')
+class TextAreaView(APIView):
+    def get(self, request, room_id):
+        chat_rooms = [{
+            "name": chat_room.name,
+            "created_at": chat_room.created_at,
+            "image": "blank",
+            "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+        } for chat_room in request.user.chat_rooms.all()]
 
-
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-        else:
-            return render(request,"chat/register.html",{
-                "form":form
-            })
-        return redirect("login-user")
-    else:
-        return render(request,"chat/register.html",{
-            "form":RegisterForm()
-        })
+        return Response(chat_rooms)
+    
+    def post(self, request):
+        serializer = ChatRoomSerializer(data=request.data)
+        if serializers.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
         
-@login_required
-def custom_logout(request):
-    logout(request)
-    return redirect('login-user')
 
 @login_required        
 def create_chat_room(request):
@@ -154,6 +185,22 @@ def create_chat_room(request):
         "new_participants": new_participants
     })
 
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            return render(request,"chat/register.html",{
+                "form":form
+            })
+        return redirect("login-user")
+    else:
+        return render(request,"chat/register.html",{
+            "form":RegisterForm()
+        })
+        
+        
 @login_required
 def chatPage(request, room_id,  *args, **kwargs):
     if not request.user.is_authenticated:
@@ -163,7 +210,7 @@ def chatPage(request, room_id,  *args, **kwargs):
 
     if room_id is not None:
         room = get_object_or_404(ChatRoom, id=room_id)
-        messages = Message.objects.filter(chat_room = room).order_by('time_stamp')
+        messages = ChatroomMessage.objects.filter(chat_room = room).order_by('time_stamp')
         new_participants = User.objects.exclude(chat_rooms = room)
         context = {
             'rooms': rooms,
@@ -179,6 +226,12 @@ def chatPage(request, room_id,  *args, **kwargs):
             'messages': None 
         }
         return render(request, 'chat/chatPage.html', context)
+        
+@login_required
+def custom_logout(request):
+    logout(request)
+    return redirect('login-user')
+
     
 @login_required
 def chatRoomList(request):

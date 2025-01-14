@@ -11,17 +11,17 @@ function App() {
   const location = useLocation();
   let className = showLogout ? 'disabled' : ''; 
 
-  // useEffect(() => {
-  //   if (!isLoggedIn && location.pathname != '/server-down') {
-  //     navigate('/login');
-  //   } else if (isLoggedIn && location.pathname === '/login') {
-  //     navigate('/chatroom')
-  //   }
-  // }, [isLoggedIn, navigate]);
-
   useEffect(() => {
-    navigate('/add-friend');
-  }, [navigate]);
+    if (!isLoggedIn && location.pathname != '/server-down') {
+      navigate('/login');
+    } else if (isLoggedIn && location.pathname === '/login') {
+      navigate('/chatroom')
+    }
+  }, [isLoggedIn, navigate]);
+
+  // useEffect(() => {
+  //   navigate('/add-friend');
+  // }, [navigate]);
 
   return (
     <>
