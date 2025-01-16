@@ -17,24 +17,41 @@ from uuid import UUID
 
 import json
 
-# @method_decorator(login_required, name='dispatch')
-# class ChatRoomView(APIView):
-#     template_name = "chatrooms"
-#     def get(self, request):
-#         chat_rooms = [{
-#             "name": chat_room.name,
-#             "created_at": chat_room.created_at,
-#             "image": "blank",
-#             "participants": [{"Username": user.username} for user in chat_room.participants.all()]
-#         } for chat_room in request.user.chat_rooms.all()]
+@method_decorator(login_required, name='dispatch')
+class ChatRoomView(APIView):
+    template_name = "chatrooms"
+    def get(self,request, room_id, format=None):
+        print(f"Received room_id: {room_id}")  # Debugging line
+        #room_id = kwargs.get("room_id")        # access the URL parameter from kwargs
+        if room_id:
+            chat_room = get_object_or_404(ChatRoom, int(room_id) )
+            messages_queryset = chat_room.roomMessages.order_by('time_stamp')
+            messages = ChatroomMessageSerializer(messages_queryset, many = True).data # get all messages in a room
+            
+            result = {
+                "name": chat_room.name,
+                "created_at": chat_room.created_at,
+                "image": "blank",
+                "chatroom_messages": messages,
+                "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+            }
+            return Response(result)
+        
+        else:
+            chat_rooms = [{
+                "name": chat_room.name,
+                "created_at": chat_room.created_at,
+                "image": "blank",
+                "participants": [{"Username": user.username} for user in chat_room.participants.all()]
+            } for chat_room in request.user.chat_rooms.all()]
 
-#         return Response(chat_rooms)
+            return Response(chat_rooms)
     
-#     def post(self, request):
-#         serializer = ChatRoomSerializer(data=request.data)
-#         if serializers.is_valid(raise_exception=True):
-#             serializer.save()
-#             return Response(serializer.data)
+    def post(self, request):
+        serializer = ChatRoomSerializer(data=request.data)
+        if serializers.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
 
 @method_decorator(login_required, name='dispatch')
 class ChatRoomView(APIView):

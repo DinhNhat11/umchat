@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from chat.views import *
+from rest_framework.urlpatterns import format_suffix_patterns
 # from django.contrib.auth.views import LoginView
 
 urlpatterns = [
@@ -13,3 +14,5 @@ urlpatterns = [
     path("accounts/get-csrf-token/", GetCSRFToken.as_view(), name="get-csrf-token"),
     path("create-chatroom/", CreateChatRoomView.as_view(), name="create-chatroom"),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
