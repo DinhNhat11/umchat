@@ -1,0 +1,123 @@
+.empty {
+    background-color: #918BC3;
+}
+
+.chatarea {
+ 
+    border-left: 1px solid white;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 2fr 20fr 3fr;
+    position: relative;
+}
+
+.chatarea-header {
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    background-color: #6762A2;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chatarea-header img {
+    height: 60px;
+}
+
+.chatroom-name > button {
+    padding: 0 10px;
+    width: 60%;
+    text-align: left;
+}
+
+.chatroom-name > button:hover {
+    background-color: #7974AB;
+}
+
+.chatroom-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.chatroom-options-list {
+    position: absolute;
+    top: 100%;
+    left: -50%;
+    background-color: #7974AB;
+}
+
+.chatroom-options-list li {
+    padding: 10px;
+}
+
+.chatroom-options-button > img{
+    height: 30px;
+    
+}
+
+.chatarea > div {
+    width: 100%;
+}
+
+.chatarea-body {
+    background-color: #918BC3;
+    padding: 10px 0;
+    overflow: auto;
+}
+
+.profile-pic-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -60%);
+    background-color: #D7D4EB;
+}
+
+.profile-pic-body img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+.profile-pic-body h3 {
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+    background-color: #6762A2;;
+    box-sizing: border-box;
+}
+
+.chatarea-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chatarea-body::-webkit-scrollbar-thumb {
+    background-color:#353453;
+    border-radius: 10px;
+}
+
+.chatarea-body::-webkit-scrollbar-track {
+    background-color: #7974AB;
+    border-radius: 10px;
+}
+
+.chatarea-footer {
+    background-color: #D7D4EB;
+    position: relative;
+}
+
+.chatarea-footer textarea {
+    width: 100%;
+    background-color: inherit;
+    min-height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    resize: none;
+    resize: vertical;
+    max-height: 200%;
+    position: absolute;
+    bottom: 0;
+}

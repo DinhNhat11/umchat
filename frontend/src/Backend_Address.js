@@ -1,0 +1,1 @@
+export const IPADDRESS = "http://localhost:8000/"

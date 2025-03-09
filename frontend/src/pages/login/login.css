@@ -1,0 +1,60 @@
+.container-login-signup {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #6762A2;
+    width: 300px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.signup-form>div:not(.submit), .login-form>div:not(.submit){
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-login-signup label{
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.container-login-signup input {
+    height: 30px;
+    font-size: 17px;
+    padding: 0 10px;
+    color: white;
+}
+
+.login-signup-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.login-signup-header button, .submit button{
+    font-size: 24px;
+    font-weight: 700;
+    padding: 10px 0;
+}
+
+.container-login-signup .active {
+    background-color: #7974AB;
+}
+
+.submit {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.submit button {
+    margin: 0 auto;
+    background-color: #7974AB;
+    padding: 10px 20px;
+    border-radius: 10px;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Welcome, {{request.user}}</h1>
+    <h5>Umchat </h5>
+    <br>
+    {% if request.user.is_authenticated  %}
+    <p> Logout the chat Page <a href = "{% url 'logout-user' %}">Logout</a></p>
+    {% endif %}
+    <div>
+      <h3>Create new chat room</h3>
+      <a href="{% url 'create-room' %}">Create Here</a>
+    </div>
+    <br>
+    <div>
+      <a href="{% url 'chat-room-list' %}">Home</a>
+    </div>
+    <br>
+    <div>
+      <h3>Rooms</h3>
+      {% for room in rooms %}
+        
+        <a href="{% url 'chat-page' room_id=room.id  %}"> Room: {{ room }}</a>
+        <br>
+        {% empty %}
+        <p>You have not joined any chat room</p>
+      {% endfor %}
+    </div>
+    <div
+      class="chat__item__container"
+      id="id_chat_item_container"
+      style="font-size: 20px"
+    >
+      <br />
+      {% if messages is not None %}
+        {% for message in messages %}
+        <p>
+          {{ message.user }} ({{ message.time_stamp|date:"H:i" }}) : {{ message.content }}
+        </p>
+        {% empty %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if room is not None %}
+
+      <div>
+        <input type="text" id="id_message_send_input" />
+        <button type="submit" id="id_message_send_button">Send Message</button>
+      </div>
+    
+    <div>
+      <h3>Add members</h3>
+      <form action="{% url 'add' room.id %}" method="POST">
+        {% csrf_token %}
+        <select name="new_participant">
+          {% for new_participant in new_participants %}
+          <option value="{{ new_participant.id }}">{{ new_participant }}</option>
+          {% empty %}
+          {% endfor %}
+        </select>
+        <input type="submit">
+      </form>
+
+      <h3>Leave this chat room</h3>
+      <form action="{% url 'leave' room.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Leave">
+      </form>
+    </div>
+    {% endif %}
+    
+
+    <script>
+
+      if("{{ room }}" !== ""){
+        const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/{{ room.name }}/");
+      
+          chatSocket.onclose = function (e) {
+            console.log("Something unexpected happened !");
+          };
+          document.querySelector("#id_message_send_input").focus();
+          document.querySelector("#id_message_send_input").onkeyup = function (e) {
+            if (e.keyCode == 13) {
+              document.querySelector("#id_message_send_button").click();
+            }
+          };
+          document.querySelector("#id_message_send_button").onclick = function (e) {
+            var messageInput = document.querySelector(
+              "#id_message_send_input"
+            ).value;
+            chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}"}));
+          };
+          chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            var div = document.createElement("div");
+            div.innerHTML = `${data.username} (${data.time_stamp}): ${data.message}`;
+            document.querySelector("#id_message_send_input").value = "";
+            document.querySelector("#id_chat_item_container").appendChild(div);
+          };
+          chatSocket.onopen = function (e) {
+            console.log("WebSocket connection opened successfully.");
+        };
+        
+        chatSocket.onerror = function (e) {
+            console.error("WebSocket error occurred:", e);
+        };
+        
+        chatSocket.onclose = function (e) {
+            console.log("WebSocket connection closed unexpectedly:", e);
+        };
+      }
+      
+    </script>
+  </body>
+</html>

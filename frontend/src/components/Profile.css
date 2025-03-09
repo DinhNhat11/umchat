@@ -1,0 +1,105 @@
+.profile {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #6762A2;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.profile div:not(.user-profile-buttons, .user-profile-options) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile img {
+    height: 150px;
+    border-radius: 50%;
+}
+
+.user-profile-header>h2 span {
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.user-profile-options {
+    margin-top: 20px;
+}
+
+.user-profile-options button{
+    margin: 0 10px;
+    padding: 10px;
+    background-color: #918BC3;
+    border-radius: 10px;
+}
+
+.user-profile-body p {
+    width: 70%;
+}
+
+.user-profile-buttons {
+    position: absolute;
+    top: 5%;
+    display: flex;
+    align-items: center;
+}
+
+.user-profile-buttons:not(.user-profile-edit>.user-profile-buttons) {
+    left: 5%;
+}
+
+.user-profile-edit>.user-profile-buttons {
+    right: 5%;
+}
+
+.user-profile-buttons img {
+    height: 50px;
+}
+
+.user-profile-buttons > button:not(:last-child) {
+    margin-right: 20px;
+}
+
+.exit-button>h3 {
+    font-size: 20px;
+}
+
+.profile-edit-form {
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 20px;
+}
+
+.profile-edit-form input {
+    width: 70%;
+    height: 20px;
+    color: white;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.profile-edit-form>div {
+    display: flex;
+    flex-direction: column;
+    align-items: start !important;
+    margin-bottom: 20px;
+}
+
+.user-profile-edit {
+    align-items: start;
+}
+
+.desc {
+    grid-column: span 3;
+}
+
+.desc textarea {
+    width: 70%;
+    height: 150px;
+}

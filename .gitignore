@@ -1,0 +1,21 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Django
+db.sqlite3s
+media/
+staticfiles/
+
+# Virtual environment
+venv/
+backend/venv/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
